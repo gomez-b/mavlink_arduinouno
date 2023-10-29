@@ -1,4 +1,5 @@
-//Author: Brian Gomez Jimenez
+//Purpose: The purpose of this code is to establish UART
+// communication from the PIXHAWK 2.4.8 to ARDUINO UNO
 #include "mavlink.h"
 #include <SoftwareSerial.h>
 SoftwareSerial Serial1(9, 10); // PIN 9=Telemetry TX->Pixhawk RX, PIN 10=Telemetry RX->Pixhawk TX
