@@ -1,5 +1,6 @@
-//Purpose: The purpose of this code is to establish UART
-// communication from the PIXHAWK 2.4.8 to ARDUINO UNO
+//Purpose: The purpose of this code is to establish UART 
+// communication from the PIXHAWK 2.4.8 to ARDUINO UNO and log data
+//on Sparkfun SD card. 
 #include "mavlink.h"
 #include <SoftwareSerial.h>
 //SD card setup
