@@ -239,7 +239,6 @@ String comm_receive() {
 String logData() {
   String receivedData = comm_receive(); // Store the result in a variable
 
-  Serial.println(receivedData); // Print the received data to Serial
 
   String data[list];
   for (uint8_t i = 0; i < list; i++) {
@@ -255,6 +254,7 @@ String logData() {
   // Serial.println(receivedData);
 
   file.print(receivedData); // Print the data to the file
+  Serial.println(receivedData); // Print the received data to Serial
 
   return receivedData; // Return the data as a string
 }
