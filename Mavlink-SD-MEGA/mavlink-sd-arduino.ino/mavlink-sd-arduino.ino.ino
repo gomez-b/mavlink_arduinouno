@@ -6,15 +6,15 @@
 #include <SPI.h>
 #include "SdFat.h"
 
-static const uint8_t arduinoRxPin = 10; // Define your receive pin
-static const uint8_t arduinoTxPin = 11; // Define your transmit pin
+static const uint8_t arduinoRxPin = 10;  // Define your receive pin
+static const uint8_t arduinoTxPin = 11;  // Define your transmit pin
 
-SoftwareSerial mySerial1(arduinoRxPin, arduinoTxPin); // Create a SoftwareSerial object
+SoftwareSerial mySerial1(arduinoRxPin, arduinoTxPin);  // Create a SoftwareSerial object
 
 // Mavlink variables
 unsigned long previousMillisMAVLink = 0;     // will store last time MAVLink was transmitted and listened
 unsigned long next_interval_MAVLink = 1000;  // next interval to count
-const int num_hbs = 1;                      // # of heartbeats to wait before activating STREAMS from Pixhawk. 60 = one minute.
+const int num_hbs = 1;                       // # of heartbeats to wait before activating STREAMS from Pixhawk. 60 = one minute.
 int num_hbs_pasados = num_hbs;
 ///**************SD SD SD SD SD SD SD SD SD SD ****************/////////
 // SD chip select pin.  Be sure to disable any other SPI devices such as Enet.
@@ -48,8 +48,8 @@ const uint8_t list = 4;
 void setup() {
   //SD setup
   const uint8_t BASE_NAME_SIZE = sizeof(FILE_BASE_NAME) - 1;
-  char fileName[13] = FILE_BASE_NAME "00.csv";  
- // MAVLink interface start
+  char fileName[13] = FILE_BASE_NAME "00.csv";
+  // MAVLink interface start
   mySerial1.begin(57600);
   Serial.begin(57600);
   // Wait for USB Serial
@@ -99,10 +99,8 @@ void setup() {
   writeHeader();
 
   // Start on a multiple of the sample interval.
-  logTime = millis()+ SAMPLE_INTERVAL_MS;
+  logTime = millis() + SAMPLE_INTERVAL_MS;
   //logTime *= 1000UL*SAMPLE_INTERVAL_MS;
-
-
 }
 
 
@@ -126,8 +124,8 @@ void loop() {
   uint8_t system_state = MAV_STATE_STANDBY;  ///< System ready for flight
 
 
-  ///SD SD SD SD SD SD SD 
-// Time for next record.
+  ///SD SD SD SD SD SD SD
+  // Time for next record.
   logTime += SAMPLE_INTERVAL_MS;
 
   // Wait for log time.
@@ -175,15 +173,14 @@ void loop() {
   //  String hi =comm_receive();
   //  Serial.println(hi);
 
-  
 
-    if (Serial.available()) {
+
+  if (Serial.available()) {
     // Close file and stop.
     file.close();
     Serial.println(F("Done"));
     while (true) {}
   }
-
 }
 
 void Mav_Request_Data() {
@@ -224,7 +221,6 @@ String comm_receive() {
             result += "System Status: " + String(heartbeat.system_status) + ", ";
             //Serial.println(gps_raw_int.lat);
             result += "Mavlink Version:" + String(heartbeat.mavlink_version) + "\n";
-
           }
 
           break;
@@ -237,12 +233,13 @@ String comm_receive() {
 //------------------------------------------------------------------------------
 // Log a data record.
 String logData() {
-  String receivedData = comm_receive(); // Store the result in a variable
+  String receivedData = comm_receive();  // Store the result in a variable
 
+  //Serial.println(receivedData); // Print the received data to Serial
 
   String data[list];
   for (uint8_t i = 0; i < list; i++) {
-    data[i] = receivedData; // Use the stored result in the data array
+    data[i] = receivedData;  // Use the stored result in the data array
   }
   // for (uint8_t i = 0; i < list; i++) {
   //   receivedData += data[i];
@@ -253,10 +250,9 @@ String logData() {
   // receivedData += '\n';
   // Serial.println(receivedData);
 
-  file.print(receivedData); // Print the data to the file
-  Serial.println(receivedData); // Print the received data to Serial
-
-  return receivedData; // Return the data as a string
+  file.print(receivedData);  // Print the data to the file
+  Serial.println(receivedData);
+  return receivedData;  // Return the data as a string
 }
 
 //------------------------------------------------------------------------------
