@@ -12,7 +12,7 @@ SoftwareSerial mySerial1(arduinoRxPin, arduinoTxPin); // Create a SoftwareSerial
 
 // Mavlink variables
 unsigned long previousMillisMAVLink = 0;     // will store last time MAVLink was transmitted and listened
-unsigned long next_interval_MAVLink = 15000;  // next interval to count
+unsigned long next_interval_MAVLink = 30000;  // next interval to count
 //const int num_hbs = 60;                      // # of heartbeats to wait before activating STREAMS from Pixhawk. 60 = one minute.
 //int num_hbs_pasados = num_hbs;
 String dataString;
@@ -109,7 +109,7 @@ void Mav_Request_Data() {
 String comm_receive() {
    String resultDate;  // Create a local String variable to hold the date part of the received data
   String resultLocation;  // Create a local String variable to hold the location part of the received data
-  //String result;  // Create a local String variable to hold the received data
+  String result;  // Create a local String variable to hold the received data
   mavlink_message_t msg;
   mavlink_status_t status;
 
@@ -141,9 +141,9 @@ String comm_receive() {
          // result+= "System Time:"+String(static_cast<unsigned long int> (system_time.time_unix_usec / 1000000));
           //time_t t = result;
           setTime(unixTimeSeconds);
-          resultDate += "Date: " + String(day()) + "/" + String(month()) + "/" + String(year()) + " ";
-          resultDate += String(hour() + 4) + ":" + String(minute()) + ":" + String(second() )+ ",";
-          millis();
+          result += "Date: " + String(day()) + "/" + String(month()) + "/" + String(year()) + " ";
+          result += String(hour() + 4) + ":" + String(minute()) + ":" + String(second() )+ ",";
+         // millis();
         }
         break;
 
@@ -152,18 +152,19 @@ String comm_receive() {
           mavlink_gps_raw_int_t gps_raw_int;
           mavlink_msg_gps_raw_int_decode(&msg,&gps_raw_int);
           //Serial.println(gps_raw_int.lat);
-          resultLocation += "Latitude:" + String(gps_raw_int.lat) + ",";
+          result+= "Latitude:" + String(gps_raw_int.lat) + ",";
 
-          resultLocation += "Longitude:" + String(gps_raw_int.lon) + "\n";
+          result+= "Longitude:" + String(gps_raw_int.lon) + "\n";
           //Serial.println(result);
           //millis();
 
         }
         break;
       }
+      
     }
   }
-  String result = resultDate + resultLocation;
+  //String result = resultDate + resultLocation;
 
   return result;
 }
