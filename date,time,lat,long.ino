@@ -15,7 +15,10 @@ unsigned long previousMillisMAVLink = 0;     // will store last time MAVLink was
 unsigned long next_interval_MAVLink = 30000;  // next interval to count
 //const int num_hbs = 60;                      // # of heartbeats to wait before activating STREAMS from Pixhawk. 60 = one minute.
 //int num_hbs_pasados = num_hbs;
-String dataString;
+//For appending info into array
+String array[10];
+String result[10];
+
 void setup() {
   // MAVLink interface start
   mySerial1.begin(57600);
@@ -79,8 +82,8 @@ void loop() {
     //}
  // }
   }
-  String receivedData = comm_receive();
-  Serial.print(receivedData);
+  comm_receive();
+  delay(3000);
 }
 
 void Mav_Request_Data() {
@@ -107,13 +110,8 @@ void Mav_Request_Data() {
 
 
 String comm_receive() {
-   String resultDate;  // Create a local String variable to hold the date part of the received data
-  String resultLocation;  // Create a local String variable to hold the location part of the received data
-  String result;  // Create a local String variable to hold the received data
   mavlink_message_t msg;
   mavlink_status_t status;
-
-
   while (mySerial1.available() > 0) {
     char c = mySerial1.read();
     if (mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status)) {
@@ -141,9 +139,13 @@ String comm_receive() {
          // result+= "System Time:"+String(static_cast<unsigned long int> (system_time.time_unix_usec / 1000000));
           //time_t t = result;
           setTime(unixTimeSeconds);
-          result += "Date: " + String(day()) + "/" + String(month()) + "/" + String(year()) + " ";
-          result += String(hour() + 4) + ":" + String(minute()) + ":" + String(second() )+ ",";
-         // millis();
+          String date = "Date: " + String(day()-1) + "/" + String(month()) + "/" + String(year()) + " ";
+          array[0]=date;
+          //Serial.println(array[0]);
+          String time = "Time: " + String(hour() + 4) + ":" + String(minute()) + ":" + String(second() )+ ",";
+          array[1] = time;
+          //Serial.println(array[1]);
+
         }
         break;
 
@@ -152,20 +154,34 @@ String comm_receive() {
           mavlink_gps_raw_int_t gps_raw_int;
           mavlink_msg_gps_raw_int_decode(&msg,&gps_raw_int);
           //Serial.println(gps_raw_int.lat);
-          result+= "Latitude:" + String(gps_raw_int.lat) + ",";
+          String latitude = "Latitude:" + String(gps_raw_int.lat) + ",";
+          array[2]=latitude;
+          //Serial.println(array[2]);
 
-          result+= "Longitude:" + String(gps_raw_int.lon) + "\n";
-          //Serial.println(result);
-          //millis();
+          String longitude = "Longitude:" + String(gps_raw_int.lon) + "\n";
+          array[3] = longitude; 
+          //Serial.println(array[3]);
 
         }
         break;
       }
-      
+        // Add corresponding elements of array1 and array2
+  for (int i = 0; i < 6; i++) {
+    result[i] = array[i];
+  }
+    // Print the result
+  Serial.print("Result: ");
+  for (int i = 0; i < 6; i++) {
+    Serial.print(result[i]);
+    Serial.print(" ");
+  }
+  Serial.println();
+
+
     }
   }
-  //String result = resultDate + resultLocation;
 
-  return result;
+
+  return " ";
 }
 
