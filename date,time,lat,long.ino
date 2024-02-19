@@ -5,8 +5,8 @@
 // communication from the PIXHAWK 2.4.8 to ARDUINO MEGA
 #include "mavlink.h"
 #include <SoftwareSerial.h>
-static const uint8_t arduinoRxPin = 10; // Define your receive pin
-static const uint8_t arduinoTxPin = 11; // Define your transmit pin
+static const uint8_t arduinoRxPin = 10; // Rx on PXH -> pin 10 on MCU
+static const uint8_t arduinoTxPin = 11; // Tx on PXH -> pin 11 on MCU
 
 SoftwareSerial mySerial1(arduinoRxPin, arduinoTxPin); // Create a SoftwareSerial object
 
